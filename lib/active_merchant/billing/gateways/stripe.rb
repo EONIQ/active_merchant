@@ -268,6 +268,10 @@ module ActiveMerchant #:nodoc:
         true
       end
 
+      def money_format(currency)
+        non_fractional_currency?(currency) ? :dollars : :cents
+      end
+
       def scrub(transcript)
         transcript.
           gsub(%r((Authorization: Basic )\w+), '\1[FILTERED]').

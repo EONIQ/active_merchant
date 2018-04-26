@@ -268,7 +268,7 @@ module ActiveMerchant #:nodoc:
 
         return amount unless non_fractional_currency?(currency)
 
-        if self.money_format == :cents
+        if self.money_format(currency) == :cents
           sprintf("%.0f", amount.to_f / 100)
         else
           amount.split('.').first
@@ -277,6 +277,10 @@ module ActiveMerchant #:nodoc:
 
       def currency(money)
         money.respond_to?(:currency) ? money.currency : self.default_currency
+      end
+
+      def money_format(currency)
+        self.money_format
       end
 
       def truncate(value, max_size)
