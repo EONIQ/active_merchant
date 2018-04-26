@@ -239,7 +239,7 @@ module ActiveMerchant #:nodoc:
         self.class.name.scan(/\:\:(\w+)Gateway/).flatten.first
       end
 
-      def amount(money)
+      def amount(money, currency)
         return nil if money.nil?
         cents = if money.respond_to?(:cents)
           ActiveMerchant.deprecated "Support for Money objects is deprecated and will be removed from a future release of ActiveMerchant. Please use an Integer value in cents"
@@ -252,7 +252,7 @@ module ActiveMerchant #:nodoc:
           raise ArgumentError, 'money amount must be a positive Integer in cents.'
         end
 
-        if self.money_format == :cents
+        if self.money_format(currency) == :cents
           cents.to_s
         else
           sprintf("%.2f", cents.to_f / 100)
@@ -264,7 +264,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def localized_amount(money, currency)
-        amount = amount(money)
+        amount = amount(money, currency)
 
         return amount unless non_fractional_currency?(currency)
 
